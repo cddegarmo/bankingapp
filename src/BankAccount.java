@@ -6,7 +6,7 @@ public class BankAccount {
     private String customerName;
     private String customerId;
 
-    BankAccount( String cname, String cid ) {
+    private BankAccount( String cname, String cid ) {
         this.customerName = cname;
         this.customerId = cid;
     }
