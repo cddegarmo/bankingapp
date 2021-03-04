@@ -15,6 +15,9 @@ public class BankAccount {
         return new BankAccount( cname, cid );
     }
 
+    public int getBalance()         { return balance;      }
+    public String getCustomerName() { return customerName; }
+
     void deposit( int amount ) {
         if( amount != 0 ) {
             balance += amount;
