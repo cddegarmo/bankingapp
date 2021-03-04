@@ -6,7 +6,7 @@ public class BankAccount {
     private String customerName;
     private String customerId;
 
-    private BankAccount( String cname, String cid ) {
+    private BankAccount(String cname, String cid) {
         this.customerName = cname;
         this.customerId = cid;
     }
@@ -17,22 +17,23 @@ public class BankAccount {
 
     public int getBalance()         { return balance;      }
     public String getCustomerName() { return customerName; }
+    public String getCustomerId()   { return customerId;   }
 
-    void deposit( int amount ) {
+    private void deposit( int amount ) {
         if( amount != 0 ) {
             balance += amount;
             previousTransaction = amount;
         }
     }
 
-    void withdraw( int amount ) {
+    private void withdraw( int amount ) {
         if( amount != 0 ) {
             balance -= amount;
             previousTransaction = -amount;
         }
     }
 
-    void getPreviousTransaction() {
+    private void getPreviousTransaction() {
         if( previousTransaction > 0 ) {
             System.out.println( "Deposited: " + previousTransaction );
         } else if( previousTransaction < 0 ) {
@@ -42,7 +43,7 @@ public class BankAccount {
         }
     }
 
-    void showMenu() {
+    public void showMenu() {
         char option = '\0';
         Scanner scanner = new Scanner( System.in );
 
@@ -61,7 +62,7 @@ public class BankAccount {
             System.out.println( "=============================" );
             option = scanner.next().charAt( 0 );
 
-            switch( option ) {
+            switch(option) {
                 case 'A':
                     System.out.println( "-----------------------" );
                     System.out.println( "Balance: " + balance );
