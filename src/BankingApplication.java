@@ -5,7 +5,8 @@ public class BankingApplication {
         BankAccount dillonChecking =
             BankAccount.addAccount("Dillon DeGarmo","24601");
 
-        dillonChecking.showMenu();
+        Checking ck = Checking.addAccount("Dillon DeGarmo", "24601");
+        ck.showMenu();
     }
 }
 
