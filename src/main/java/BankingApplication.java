@@ -1,12 +1,10 @@
+package main.java;
 
 public class BankingApplication {
     public static void main(String[] args) {
-
-        BankAccount checking =
-            BankAccount.addAccount("John Doe", "54367");
-
-        Checking ck = Checking.addAccount("Jane Doe", "24601");
-        ck.showMenu();
+        BankAccount savings = BankAccount.addAccount("Peter Gibbons", 23452);
+        BankAccount checking = BankAccount.addAccount("Peter Gibbons", 23453);
+        checking.showMenu();
     }
 }
 
