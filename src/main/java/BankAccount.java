@@ -1,23 +1,35 @@
-import java.util.Scanner;
+package main.java;
+
+import java.util.*;
 
 public class BankAccount {
+    private static final Map<Integer, BankAccount> accounts = new HashMap<>();
+
     private int balance = 0;
     private int previousTransaction = 0;
     private final String customerName;
-    private final String customerId;
+    private final int accountNumber;
 
-    private BankAccount(String cname, String cid) {
+    private BankAccount(String cname, int accNo) {
         customerName = cname;
-        customerId = cid;
+        accountNumber = accNo;
     }
 
-    public static BankAccount addAccount(String cname, String cid) {
-        return new BankAccount(cname, cid);
+    public static BankAccount addAccount(String cname, int accNO) {
+        BankAccount account = new BankAccount(cname, accNO);
+        accounts.putIfAbsent(accNO, account);
+        return account;
     }
 
-    public int getBalance()         { return balance;      }
-    public String getCustomerName() { return customerName; }
-    public String getCustomerId()   { return customerId;   }
+    public int getBalance()         { return balance;             }
+    public String getCustomerName() { return customerName;        }
+    public int getAccountNumber()   { return accountNumber;       }
+    public int getPrevious()        { return previousTransaction; }
+
+    public static void getBalances() {
+        for (BankAccount account : accounts.values())
+            System.out.println(account.getAccountNumber() + ": " + account.getBalance());
+    }
 
     public void deposit(int amount) {
         if(amount > 0) {
@@ -27,22 +39,34 @@ public class BankAccount {
     }
 
     public void withdraw(int amount) {
-        if(amount > balance)
+        if(amount > balance) {
             System.out.println("Overdraft warning. Current balance: " + balance);
-        else {
+            previousTransaction = 0;
+        } else {
             balance -= amount;
             previousTransaction = -amount;
         }
     }
 
+    public void transfer(int amount, int accountNumber) {
+        BankAccount target = retrieve(accountNumber);
+        if (amount <= balance)
+            target.deposit(amount);
+        withdraw(amount);
+    }
+
+    private BankAccount retrieve(int accountNumber) {
+        BankAccount account = accounts.get(accountNumber);
+        return account;
+    }
+
     public void getPreviousTransaction() {
-        if(previousTransaction > 0) {
+        if(previousTransaction > 0)
             System.out.println("Deposited: " + previousTransaction);
-        } else if(previousTransaction < 0) {
+        else if(previousTransaction < 0)
             System.out.println("Withdrawn: " + Math.abs(previousTransaction));
-        } else {
+        else
             System.out.println("No transaction occurred");
-        }
     }
 
     public void showMenu() {
@@ -51,12 +75,12 @@ public class BankAccount {
 
         do {
             System.out.println("Welcome " + customerName);
-            System.out.println("Your ID is " + customerId);
-            System.out.println("\n");
+            System.out.println("Your account number is " + accountNumber);
+            System.out.println();
             System.out.println("A. Check Balance");
             System.out.println("B. Deposit");
             System.out.println("C. Withdraw");
-            System.out.println("D. Previous transaction");
+            System.out.println("D. Transfer");
             System.out.println("E. Exit");
             System.out.println("=============================");
             System.out.println("Enter an option" );
@@ -66,9 +90,9 @@ public class BankAccount {
             switch(option) {
                 case 'A':
                     System.out.println("-----------------------");
-                    System.out.println("Balance: " + balance);
+                    System.out.println("Balances");
+                    getBalances();
                     System.out.println("-----------------------");
-                    System.out.println();
                     break;
 
                 case 'B':
@@ -77,7 +101,6 @@ public class BankAccount {
                     System.out.println("-----------------------");
                     int amount = scanner.nextInt();
                     deposit(amount);
-                    System.out.println();
                     break;
 
                 case 'C':
@@ -86,14 +109,19 @@ public class BankAccount {
                     System.out.println("-----------------------");
                     int withdrawn = scanner.nextInt();
                     withdraw(withdrawn);
-                    System.out.println();
                     break;
 
                 case 'D':
+                    getBalances();
                     System.out.println("-----------------------");
-                    getPreviousTransaction();
+                    System.out.println("Enter an amount to transfer:");
                     System.out.println("-----------------------");
-                    System.out.println();
+                    int transfer = scanner.nextInt();
+                    System.out.println("-----------------------");
+                    System.out.println("Enter an account number:");
+                    System.out.println("-----------------------");
+                    int target = scanner.nextInt();
+                    transfer(transfer, target);
                     break;
 
                 case 'E':
