@@ -38,4 +38,26 @@ public class BankAccountTest {
       ba.withdraw(12037);
       assertEquals(7963, ba.getBalance());
    }
+
+   @Test
+   public void testDuplication() {
+      BankAccount ba = BankAccount.addAccount("John Doe", 12345);
+      assertThrows(IllegalArgumentException.class,
+                   () -> BankAccount.addAccount("John Doe", 12345));
+   }
+
+   @Test
+   public void testTransfers() {
+      BankAccount ba1 = BankAccount.addAccount("John Doe", 12345);
+      BankAccount ba2 = BankAccount.addAccount("John Doe", 12346);
+      assertAll(
+           () -> assertEquals(0, ba1.getBalance()),
+           () -> assertEquals(0, ba2.getBalance()));
+      ba1.deposit(10000);
+      ba1.transfer(5000, 12346);
+      assertEquals(5000, ba2.getBalance());
+      assertEquals(5000, ba2.getPrevious());
+      assertEquals(-5000, ba1.getPrevious());
+      assertEquals(5000, ba1.getBalance());
+   }
 }
