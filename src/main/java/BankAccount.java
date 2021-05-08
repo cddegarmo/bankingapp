@@ -17,7 +17,10 @@ public class BankAccount {
 
     public static BankAccount addAccount(String cname, int accNO) {
         BankAccount account = new BankAccount(cname, accNO);
-        accounts.putIfAbsent(accNO, account);
+        if (accounts.containsKey(accNO))
+            throw new IllegalArgumentException("Please choose different account number.");
+        else
+            accounts.put(accNO, account);
         return account;
     }
 
